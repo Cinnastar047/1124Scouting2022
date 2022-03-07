@@ -1,0 +1,17 @@
+{
+  "name": "1124scouting2022",
+  "version": "1.0.0",
+  "description": "Minimal event stats for rapid react!",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Erin Weston",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "csv-writer": "^1.6.0",
+    "ml-matrix": "^6.9.0"
+  }
+}
