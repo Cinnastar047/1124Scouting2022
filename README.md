@@ -28,3 +28,5 @@ npm i
 npm start
 ```
 This should cause app.js to run, which will send a couple requests to TBA for data, calculate the numbers described above from it, and write them to a CSV file in the same folder as the program files. You can then open this file in any spreadsheet software you'd like (Excel, Numbers, Google Sheets, etc).
+## If you run into scary errors instead of getting a CSV file
+Take a screenshot of it and come yell at me.
