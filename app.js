@@ -32,7 +32,7 @@ async function main () {
 	try {
 		const eventData = await axios.get(url2);
 		for (i=0; i < eventData.data.length; i++) {
-			if (eventData.data[i].comp_level == 'qm') relevantData.push(eventData.data[i]);
+			if (eventData.data[i].comp_level == 'qm' && typeof eventData.data[i].actual_time == 'number') relevantData.push(eventData.data[i]);
 		}
 		//console.log(relevantData);
 	} catch (e) {
