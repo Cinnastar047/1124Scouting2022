@@ -1,7 +1,7 @@
 const axios = require('axios');
 const {Matrix, solve} = require('ml-matrix');
 const createCsvWriter = require('csv-writer').createArrayCsvWriter;
-const apiKey = 'xxx';
+const apiKey = 'xxxxx';
 const competitionYear = '2022';
 axios.defaults.headers.common['X-TBA-Auth-Key'] = apiKey;
 let cleanTeamList = [];
@@ -10,7 +10,7 @@ let allianceMatrix = [];
 let output = [];
 /*---------------------- ADD YOUR INPUTS HERE ----------------------*/
 let inputs = {
-	eventCode: "event", // event is generally stateAbbreviation+firstThreeLettersOfHostTownName (try ctwat or cthar)
+	eventCode: "event" // event is generally stateAbbreviation+firstThreeLettersOfHostTownName (try ctwat or cthar)
 };
 /*--------------- DO NOT CHANGE STUFF BELOW THIS LINE ---------------*/
 
@@ -98,6 +98,7 @@ async function main () {
 	
 	// calculate percent based numbers
 	let taxiPercent = [];
+	let noClimb = [];
 	let lowClimb = [];
 	let midClimb = [];
 	let highClimb = [];
@@ -106,6 +107,7 @@ async function main () {
 		let teamKey = 'frc' + cleanTeamList[i];
 		let numMatches = 0;
 		let numTaxis = 0;
+		let numNoClimbs = 0;
 		let numLowClimbs = 0;
 		let numMidClimbs = 0;
 		let numHighClimbs = 0;
@@ -115,52 +117,59 @@ async function main () {
 				numMatches++;
 				if (relevantData[j].score_breakdown.blue.taxiRobot1 === 'Yes') numTaxis++;
 				if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'Traversal') numTraverseClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'High') numHighClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'Mid') numMidClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'Low') numLowClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'High') numHighClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'Mid') numMidClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot1 === 'Low') numLowClimbs++;
+				else numNoClimbs++;
 			}
 			if (relevantData[j].alliances.blue.team_keys[1] === teamKey) {
 				numMatches++;
 				if (relevantData[j].score_breakdown.blue.taxiRobot2 === 'Yes') numTaxis++;
 				if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'Traversal') numTraverseClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'High') numHighClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'Mid') numMidClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'Low') numLowClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'High') numHighClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'Mid') numMidClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot2 === 'Low') numLowClimbs++;
+				else numNoClimbs++;
 			}
 			if (relevantData[j].alliances.blue.team_keys[2] === teamKey) {
 				numMatches++;
 				if (relevantData[j].score_breakdown.blue.taxiRobot3 === 'Yes') numTaxis++;
 				if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'Traversal') numTraverseClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'High') numHighClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'Mid') numMidClimbs++;
-				if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'Low') numLowClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'High') numHighClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'Mid') numMidClimbs++;
+				else if (relevantData[j].score_breakdown.blue.endgameRobot3 === 'Low') numLowClimbs++;
+				else numNoClimbs++;
 			}
 			if (relevantData[j].alliances.red.team_keys[0] === teamKey) {
 				numMatches++;
 				if (relevantData[j].score_breakdown.red.taxiRobot1 === 'Yes') numTaxis++;
 				if (relevantData[j].score_breakdown.red.endgameRobot1 === 'Traversal') numTraverseClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot1 === 'High') numHighClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot1 === 'Mid') numMidClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot1 === 'Low') numLowClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot1 === 'High') numHighClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot1 === 'Mid') numMidClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot1 === 'Low') numLowClimbs++;
+				else numNoClimbs++;
 			}
 			if (relevantData[j].alliances.red.team_keys[1] === teamKey) {
 				numMatches++;
 				if (relevantData[j].score_breakdown.red.taxiRobot2 === 'Yes') numTaxis++;
 				if (relevantData[j].score_breakdown.red.endgameRobot2 === 'Traversal') numTraverseClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot2 === 'High') numHighClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot2 === 'Mid') numMidClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot2 === 'Low') numLowClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot2 === 'High') numHighClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot2 === 'Mid') numMidClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot2 === 'Low') numLowClimbs++;
+				else numNoClimbs++;
 			}
 			if (relevantData[j].alliances.red.team_keys[2] === teamKey) {
 				numMatches++;
 				if (relevantData[j].score_breakdown.red.taxiRobot3 === 'Yes') numTaxis++;
 				if (relevantData[j].score_breakdown.red.endgameRobot3 === 'Traversal') numTraverseClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot3 === 'High') numHighClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot3 === 'Mid') numMidClimbs++;
-				if (relevantData[j].score_breakdown.red.endgameRobot3 === 'Low') numLowClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot3 === 'High') numHighClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot3 === 'Mid') numMidClimbs++;
+				else if (relevantData[j].score_breakdown.red.endgameRobot3 === 'Low') numLowClimbs++;
+				else numNoClimbs++;
 			}
 		}
 		taxiPercent.push(numTaxis/numMatches);
+		noClimb.push(numNoClimbs/numMatches);
 		lowClimb.push(numLowClimbs/numMatches);
 		midClimb.push(numMidClimbs/numMatches);
 		highClimb.push(numHighClimbs/numMatches);
@@ -190,12 +199,12 @@ async function main () {
 		}
 		let autoCargoPoints = autoCargoHighPower.get(i,0) * 4 + autoCargoLowPower.get(i,0) * 2;
 		let teleopCargoPoints = teleopCargoHighPower.get(i,0) * 2 + teleopCargoLowPower.get(i,0);
-		let row = [cleanTeamList[i], teamRank, taxiPercent[i], autoCargoHighPower.get(i,0), autoCargoLowPower.get(i,0), autoCargoPoints, teleopCargoHighPower.get(i,0), teleopCargoLowPower.get(i,0), teleopCargoPoints, lowClimb[i], midClimb[i], highClimb[i], traverseClimb[i], foulLiability.get(i,0)];
+		let row = [cleanTeamList[i], teamRank, taxiPercent[i], autoCargoHighPower.get(i,0), autoCargoLowPower.get(i,0), autoCargoPoints, teleopCargoHighPower.get(i,0), teleopCargoLowPower.get(i,0), teleopCargoPoints, noClimb[i], lowClimb[i], midClimb[i], highClimb[i], traverseClimb[i], foulLiability.get(i,0)];
 		output.push(row);
 	}
 	
 	// save to csv file and sort it yourself :p
-	const csvWriter = createCsvWriter({header: ['Team Number', 'Rank', '% Taxi', '# Auto Cargo High', '# Auto Cargo Low', 'Auto Cargo Points', '# TeleOp Cargo High', '# TeleOp Cargo Low', 'TeleOp Cargo Points', '% Low Climbs', '% Mid Climbs', '% High Climbs', '% Traverse Climbs', 'Foul Liability'], path: `Data for ${inputs.eventCode}.csv`});
+	const csvWriter = createCsvWriter({header: ['Team Number', 'Rank', '% Taxi', '# Auto Cargo High', '# Auto Cargo Low', 'Auto Cargo Points', '# TeleOp Cargo High', '# TeleOp Cargo Low', 'TeleOp Cargo Points', '% No Climbs', '% Low Climbs', '% Mid Climbs', '% High Climbs', '% Traverse Climbs', 'Foul Liability'], path: `Data for ${inputs.eventCode}.csv`});
 	csvWriter.writeRecords(output).then(() => {console.log('Done');});
 	
 }
