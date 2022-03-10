@@ -103,6 +103,7 @@ async function main () {
 	let midClimb = [];
 	let highClimb = [];
 	let traverseClimb = [];
+	let numPlayed = [];
 	for (i=0; i < cleanTeamList.length; i++) {
 		let teamKey = 'frc' + cleanTeamList[i];
 		let numMatches = 0;
@@ -174,6 +175,7 @@ async function main () {
 		midClimb.push(numMidClimbs/numMatches);
 		highClimb.push(numHighClimbs/numMatches);
 		traverseClimb.push(numTraverseClimbs/numMatches);
+		numPlayed.push(numMatches);
 	}
 	// why was this so many lines of code???
 	
@@ -199,12 +201,12 @@ async function main () {
 		}
 		let autoCargoPoints = autoCargoHighPower.get(i,0) * 4 + autoCargoLowPower.get(i,0) * 2;
 		let teleopCargoPoints = teleopCargoHighPower.get(i,0) * 2 + teleopCargoLowPower.get(i,0);
-		let row = [cleanTeamList[i], teamRank, taxiPercent[i], autoCargoHighPower.get(i,0), autoCargoLowPower.get(i,0), autoCargoPoints, teleopCargoHighPower.get(i,0), teleopCargoLowPower.get(i,0), teleopCargoPoints, noClimb[i], lowClimb[i], midClimb[i], highClimb[i], traverseClimb[i], foulLiability.get(i,0)];
+		let row = [cleanTeamList[i], teamRank, taxiPercent[i], autoCargoHighPower.get(i,0), autoCargoLowPower.get(i,0), autoCargoPoints, teleopCargoHighPower.get(i,0), teleopCargoLowPower.get(i,0), teleopCargoPoints, noClimb[i], lowClimb[i], midClimb[i], highClimb[i], traverseClimb[i], foulLiability.get(i,0), numPlayed[i]];
 		output.push(row);
 	}
 	
 	// save to csv file and sort it yourself :p
-	const csvWriter = createCsvWriter({header: ['Team Number', 'Rank', '% Taxi', '# Auto Cargo High', '# Auto Cargo Low', 'Auto Cargo Points', '# TeleOp Cargo High', '# TeleOp Cargo Low', 'TeleOp Cargo Points', '% No Climbs', '% Low Climbs', '% Mid Climbs', '% High Climbs', '% Traverse Climbs', 'Foul Liability'], path: `Data for ${inputs.eventCode}.csv`});
+	const csvWriter = createCsvWriter({header: ['Team Number', 'Rank', '% Taxi', '# Auto Cargo High', '# Auto Cargo Low', 'Auto Cargo Points', '# TeleOp Cargo High', '# TeleOp Cargo Low', 'TeleOp Cargo Points', '% No Climbs', '% Low Climbs', '% Mid Climbs', '% High Climbs', '% Traverse Climbs', 'Foul Liability', 'Matches Played'], path: `Data for ${inputs.eventCode}.csv`});
 	csvWriter.writeRecords(output).then(() => {console.log('Done');});
 	
 }
