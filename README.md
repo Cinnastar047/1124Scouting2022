@@ -4,6 +4,9 @@ The motivation for this project is based in a things:
 1. I spent a few years in high school as the head strategist on my FRC team. I know very well how difficult it is to keep high schoolers on track and recording accurate data and how it tiring it is to do so for 2-3 days straight.
 2. I've been frustrated by the limitations of OPR for the purposes of making a pick list.
 3. I've noticed that FIRST has recently (~2017) begun recording additional information about matches.
+
+For the 2023 version of this project, see the [Google Sheet](https://docs.google.com/spreadsheets/d/1obQQKPVK4xG6EJBp0p6tyHqkOud8KV0JBBh8CXGgscc/edit?usp=sharing)!!
+
 ## A Word About OPR
 For anyone unfamiliar, OPR finds a Least Squares solution to a very large matrix division problem to estimate how many points a team contributes to their alliance at an event. Essentially, this is done by creating a very large matrix of 1's and 0's to denote which teams are on each alliance each match, and dividing it by another very large, single-column matrix of their scores. The result is a final very large, single-column matrix, the values of which are the OPRs of each team at the event. Unforunately, this only tells us approximately how many points they contribute to each of their alliances, and when making a pick list, you may be interested in something like which rung they climb on in the endgame period.
 ## What This Does
